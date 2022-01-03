@@ -5,7 +5,11 @@ const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export async function createCharacter(character){
     const newCharacter = {
-        ...character, 
+        //what do I put here? this doesn't seem right. how do I check?
+        catchphrases: [],
+        head: 1,
+        middle: 1, 
+        bottom: 1,
         user_id: client.auth.user().id, 
     };
 

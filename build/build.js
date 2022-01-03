@@ -30,7 +30,7 @@ let bottomCount = 0;
 
 headDropdown.addEventListener('change', async() => {
     // increment the correct count in state
-
+    headCount++;
     // update the head in supabase with the correct data
     refreshData();
 });
@@ -38,7 +38,7 @@ headDropdown.addEventListener('change', async() => {
 
 middleDropdown.addEventListener('change', async() => {
     // increment the correct count in state
-    
+    middleCount++;
     // update the middle in supabase with the correct data
     refreshData();
 });
@@ -46,7 +46,7 @@ middleDropdown.addEventListener('change', async() => {
 
 bottomDropdown.addEventListener('change', async() => {
     // increment the correct count in state
-    
+    bottomCount++;
     // update the bottom in supabase with the correct data
     refreshData();
 });
@@ -79,13 +79,13 @@ logoutButton.addEventListener('click', () => {
 });
 
 function displayStats() {
-    reportEl.textContent = `In this session, you have changed the head ${headCount} times, the body ${middleCount} times, and the pants ${bottomCount} times. And nobody can forget your character's classic catchphrases:`;
+    reportEl.textContent = `In this session, you have changed the head ${headCount} ${(headCount === 1) ? 'time' : 'times'}, the body ${middleCount} ${(middleCount === 1) ? 'time' : 'times'}, and the pants ${bottomCount} ${(bottomCount === 1) ? 'time' : 'times'}. And nobody can forget your character's classic catchphrases:`;
 }
 
 
 
 async function fetchAndDisplayCharacter() {
-    // fetch the caracter from supabase
+    // fetch the character from supabase
 
     // if the character has a head, display the head in the dom
     // if the character has a middle, display the middle in the dom
