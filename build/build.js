@@ -6,7 +6,7 @@ import {
     updateBottom,
     updateHead,
     updateMiddle,
-    updateChatchphrases
+    updateCatchphrases
 } from '../fetch-utils.js';
 
 checkAuth();
@@ -56,13 +56,14 @@ bottomDropdown.addEventListener('change', async() => {
 });
 
 catchphraseButton.addEventListener('click', async() => {
-    catchphraseInput.value = '';
-
     // go fetch the old catch phrases
-    
-    // update the catchphrases array locally by pushing the new catchphrase into the old array
+    const character = await getCharacter();
 
+    // update the catchphrases array locally by pushing the new catchphrase into the old array
+    character.catchphrases.push(catchphraseInput.value);
     // update the catchphrases in supabase by passing the mutated array to the updateCatchphrases function
+    await updateCatchphrases(character.catchphrases);
+    
     refreshData();
 });
 
@@ -82,8 +83,6 @@ window.addEventListener('load', async() => {
         });
     } 
 
-    // and put the character's catchphrases in state (we'll need to hold onto them for an interesting reason);
-
     // then call the refreshData function to set the DOM with the updated data
     refreshData();
 });
@@ -101,8 +100,8 @@ function displayStats() {
 async function fetchAndDisplayCharacter() {
     // fetch the character from supabase
     const character = await getCharacter();
+    // console.log(character);
 
-    console.log(character);
     // if the character has a head, display the head in the dom
     if (character.head) {
         headEl.style.backgroundImage = `url(../assets/${character.head}-head.png)`;
@@ -123,9 +122,7 @@ async function fetchAndDisplayCharacter() {
         catchphraseEl.classList.add('catchphrase');
         catchphraseEl.textContent = catchphrase;
         catchphrasesEl.append(catchphraseEl);
-        return catchphraseEl;
     }
-    
 }
 
 function refreshData() {
