@@ -4,16 +4,13 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsI
 const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export async function createCharacter(character){
-    const newCharacter = {
-        //what do I put here? this doesn't seem right. how do I check?
-        catchphrases: [],
-        head: 1,
-        middle: 1, 
-        bottom: 1,
-        user_id: client.auth.user().id, 
-    };
 
-    // use the newCharacter to create a single new character for this user in supabase
+    //create a single new character for this user in supabase
+    const response = await client
+        .from('characters')
+        .insert([character])
+        .single();
+
     return checkError(response);
 }
 
@@ -22,6 +19,10 @@ export async function updateHead(value){
 
     // in supabase, update the head property
     // for the character whose user_id match's the currently logged in user's id
+    const response = await client
+        .from('characters')
+        .update({ head: value })
+        .match({ user_id: currentUserId });
 
     return checkError(response);    
 }
@@ -32,6 +33,10 @@ export async function updateMiddle(value){
 
     // in supabase, update the middle property
     // for the character whose user_id match's the currently logged in user's id
+    const response = await client
+        .from('characters')
+        .update({ middle: value })
+        .match({ user_id: currentUserId });
 
     return checkError(response);    
 }
@@ -42,6 +47,10 @@ export async function updateBottom(value){
 
     // in supabase, update the bottom property
     // for the character whose user_id match's the currently logged in user's id
+    const response = await client
+        .from('characters')
+        .update({ bottom: value })
+        .match({ user_id: currentUserId });
 
     return checkError(response);    
 }

@@ -18,7 +18,7 @@ const headEl = document.getElementById('head');
 const middleEl = document.getElementById('middle');
 const bottomEl = document.getElementById('bottom');
 const reportEl = document.getElementById('report');
-const chatchphrasesEl = document.getElementById('chatchphrases');
+const catchphrasesEl = document.getElementById('catchphrases');
 const catchphraseInput = document.getElementById('catchphrase-input');
 const catchphraseButton = document.getElementById('catchphrase-button');
 const logoutButton = document.getElementById('logout');
@@ -32,6 +32,8 @@ headDropdown.addEventListener('change', async() => {
     // increment the correct count in state
     headCount++;
     // update the head in supabase with the correct data
+    const updatedHead = await updateHead(headDropdown.value);
+
     refreshData();
 });
 
@@ -63,11 +65,21 @@ catchphraseButton.addEventListener('click', async() => {
 });
 
 window.addEventListener('load', async() => {
-    let character;
+    
     // on load, attempt to fetch this user's character
+    const character = await getCharacter();
 
     // if this user turns out not to have a character
     // create a new character with correct defaults for all properties (head, middle, bottom, catchphrases)
+    if (!character) {
+        await createCharacter({
+            head: '',
+            middle: '',
+            bottom: '',
+            catchphrases: [],
+        });
+    } 
+    
     // and put the character's catchphrases in state (we'll need to hold onto them for an interesting reason);
 
     // then call the refreshData function to set the DOM with the updated data
@@ -86,12 +98,24 @@ function displayStats() {
 
 async function fetchAndDisplayCharacter() {
     // fetch the character from supabase
+    const character = await getCharacter();
 
+    console.log(character);
     // if the character has a head, display the head in the dom
     // if the character has a middle, display the middle in the dom
     // if the character has a pants, display the pants in the dom
     
     // loop through catchphrases and display them to the dom (clearing out old dom if necessary)
+    catchphrasesEl.textContent = '';
+
+    for (let catchphrase of character.catchphrases) {
+        const catchphraseEl = document.createElement('p');
+        catchphraseEl.classList.add('catchphrase');
+        catchphraseEl.textContent = catchphrase;
+        catchphrasesEl.append(catchphraseEl);
+        
+    }
+    
 }
 
 function refreshData() {
